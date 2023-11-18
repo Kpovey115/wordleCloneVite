@@ -26,7 +26,7 @@ const useWordle = (solution) => {
    */
 
   const handleKeyup = ({ key }) => {
-    // I only care about letter values, keys such as shift / enter aren't going to be a factor here
+    // I only care about letter values, keys such as shift / numbers or brackets aren't going to be a factor here
     if (/^[A-Za-z]$/.test(key)) {
       // next we need to check if currentGuess string is less than 5 chars
       if (currentGuess.length < 5) {
@@ -37,6 +37,31 @@ const useWordle = (solution) => {
     // user needs to be able to delete the last char
     if (key === "Backspace") {
       setCurrentGuess((prev) => prev.slice(0, -1));
+    }
+
+    // user need to submit a guess
+    // we need to check to see if length of string is exactly 5 and hasn't been previously guessed and the turn value hasn't gone above 5
+
+    if (key === "Enter") {
+      if (turn > 5) {
+        // will put failure logic later
+        console.log("turn is higher than 5");
+        return;
+      }
+
+      if (history.includes(currentGuess)) {
+        // will put failure logic later
+        console.log("word has already been guessed");
+        return;
+      }
+
+      if (currentGuess.length !== 5) {
+        // will put failure logic later
+        console.log("word isn't long enough");
+        return;
+      }
+
+      formatGuess();
     }
   };
 
