@@ -33,6 +33,11 @@ const useWordle = (solution) => {
         setCurrentGuess((prev) => prev + key);
       }
     }
+
+    // user needs to be able to delete the last char
+    if (key === "Backspace") {
+      setCurrentGuess((prev) => prev.slice(0, -1));
+    }
   };
 
   return { turn, currentGuess, guesses, isCorrect, handleKeyup };
