@@ -10,7 +10,35 @@ const useWordle = (solution) => {
   // format a guess into an array of letter objects
   // eg [{key: 'a', color: "yellow"}]
 
-  const formatGuess = () => {};
+  const formatGuess = () => {
+    const solutionArray = [...solution];
+    const formattedGuess = [...currentGuess].map((letter) => {
+      return { key: letter, colour: "grey" };
+    });
+
+    // find any green letters (letter should be in the correct place)
+    formattedGuess.forEach((letter, i) => {
+      if (solutionArray[i] === letter.key) {
+        formattedGuess[i].colour = "green";
+
+        // I want to mutate the solutionArray and make that letter null after I've confirmed its value is in the correct place. This avoids double matching
+        solutionArray[i] = null;
+      }
+    });
+
+    // check for yellow letters (letter is in the solution but not correct place)
+
+    formattedGuess.forEach((letter, i) => {
+      if (solutionArray.includes(letter.key) && letter.colour !== "green") {
+        formattedGuess[i].colour = "yellow";
+
+        // same as above, ensuring no double matching of the guess
+        solutionArray[solutionArray.indexOf(letter.key)] = null;
+      }
+    });
+
+    return formattedGuess;
+  };
 
   /*
     add a new guess to the guesses state
@@ -18,7 +46,11 @@ const useWordle = (solution) => {
     add one to the turn state
     */
 
-  const addNewGuess = () => {};
+  const addNewGuess = (formattedGuess) => {
+    if (currentGuess === solution) {
+      setIsCorrect(true);
+    }
+  };
 
   /*
   handle keyup event & track current guess
@@ -60,8 +92,8 @@ const useWordle = (solution) => {
         console.log("word isn't long enough");
         return;
       }
-
-      formatGuess();
+      const formatted = formatGuess();
+      addNewGuess(formatted);
     }
   };
 
