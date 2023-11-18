@@ -25,7 +25,15 @@ const useWordle = (solution) => {
   if user presses enter, add the new guess
    */
 
-  const handleKeyup = () => {};
+  const handleKeyup = ({ key }) => {
+    // I only care about letter values, keys such as shift / enter aren't going to be a factor here
+    if (/^[A-Za-z]$/.test(key)) {
+      // next we need to check if currentGuess string is less than 5 chars
+      if (currentGuess.length < 5) {
+        setCurrentGuess((prev) => prev + key);
+      }
+    }
+  };
 
   return { turn, currentGuess, guesses, isCorrect, handleKeyup };
 };
